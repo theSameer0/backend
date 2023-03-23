@@ -1,7 +1,7 @@
 package api
 
 import (
-	DB "example/sameer_mbs/src/server/database"
+	DB "example/backend/database"
 	"fmt"
 	"net/http"
 

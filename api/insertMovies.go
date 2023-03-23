@@ -1,7 +1,7 @@
 package api
 
 import (
-	"example/sameer_mbs/src/server/database"
+	"example/backend/database"
 	"net/http"
 	"strings"
 

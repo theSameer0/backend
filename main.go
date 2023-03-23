@@ -1,7 +1,7 @@
 package main
 
 import (
-	api "example/sameer_mbs/src/server/api"
+	api "example/backend/api"
 
 	"github.com/gin-gonic/gin"
 )

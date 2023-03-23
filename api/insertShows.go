@@ -1,7 +1,7 @@
 package api
 
 import (
-	"example/sameer_mbs/src/server/database"
+	"example/backend/database"
 	"net/http"
 	"strconv"
 	"strings"
@@ -30,7 +30,7 @@ func InsertShows(c *gin.Context) {
 		if i != len(showList)-1 {
 			insert += ","
 		}
-		if checkTheatre(t) {
+		if checkShow(t) {
 			c.IndentedJSON(http.StatusMethodNotAllowed, gin.H{"successs": false, "message": "Some fields are empty."})
 			return
 		}
@@ -47,8 +47,8 @@ func InsertShows(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"success": true, "Ids": ids})
 }
 
-func checkTheatre(t Theatre) bool {
-	if strings.Trim(t.Id, " ") == "" || strings.Trim(t.Name, " ") == "" || strings.Trim(t.Location, " ") == "" || strings.Trim(t.Image, " ") == strings.Trim(t.City, " ") || t.Screen <= 0 {
+func checkShow(t Show) bool {
+	if strings.Trim(t.Id, " ") == "" || strings.Trim(t.Time, " ") == "" || strings.Trim(t.Date, " ") == "" || t.Screen <= 0 || strings.Trim(t.MovieId, " ") == "" || strings.Trim(t.TheatreId, " ") == "" {
 		return true
 	}
 	return false

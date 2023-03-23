@@ -1,10 +1,11 @@
 package api
 
 import (
-	"example/sameer_mbs/src/server/database"
+	"example/backend/database"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,10 @@ func InsertTheatres(c *gin.Context) {
 		if i != len(theatreList)-1 {
 			insert += ","
 		}
+		if checkTheatre(t) {
+			c.IndentedJSON(http.StatusMethodNotAllowed, gin.H{"successs": false, "message": "Some fields are empty."})
+			return
+		}
 	}
 	fmt.Printf("%v", insert)
 	row, err := db.Query("Insert into theatre (Id,Name,Location,Image,City,Screen) values " + insert + ";")
@@ -41,4 +46,11 @@ func InsertTheatres(c *gin.Context) {
 		db.Close()
 	}()
 	c.IndentedJSON(http.StatusOK, gin.H{"success": true, "Ids": ids})
+}
+
+func checkTheatre(t Theatre) bool {
+	if strings.Trim(t.Id, " ") == "" || strings.Trim(t.Name, " ") == "" || strings.Trim(t.Location, " ") == "" || strings.Trim(t.Image, " ") == "" || strings.Trim(t.City, " ") == "" || t.Screen <= 0 {
+		return true
+	}
+	return false
 }
