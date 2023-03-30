@@ -1,6 +1,7 @@
-package api
+package ticket
 
 import (
+	INDENT "example/backend/api/struct"
 	DB "example/backend/database"
 	"fmt"
 	"net/http"
@@ -15,14 +16,15 @@ func GetTicket(c *gin.Context) {
 		c.IndentedJSON(http.StatusMethodNotAllowed, gin.H{"success": false, "message": "This api is not valid. "})
 		return
 	}
+
 	row := db.QueryRow("SELECT Id, Date, Time, Seats, SeatCount, Screen, MovieId, TheatreId, ShowId FROM ticket")
 	defer func() {
 		db.Close()
 	}()
-	var ticket Ticket
+	var ticket INDENT.Ticket
 	err := row.Scan(&ticket.Id, &ticket.Date, &ticket.Time, &ticket.Seats, &ticket.SeatCount, &ticket.Screen, &ticket.MovieId, &ticket.TheatreId, &ticket.ShowId)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"success": false, "message": "Error while Scanning the List."})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"success": false, "message": "Error while Scanning the List.", "Error": err.Error()})
 		return
 	}
 	c.IndentedJSON(http.StatusOK, gin.H{"success": true, "ticket": ticket})

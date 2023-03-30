@@ -20,43 +20,43 @@
 
 -- +goose Up
 CREATE TABLE movies (
-    Id text primary key,
-    Name text,
-    Language text,
-    Image text,
-    HeadImage text,
-    Tags text,
-    Comment text
+    Id serial primary key ,
+    Name text not null,
+    Language text not null,
+    Image text not null,
+    HeadImage text not null,
+    Tags text not null,
+    Comment text not null
 );
 CREATE TABLE IF NOT EXISTS theatre (
-    Id text primary key,
-    Name text,
-    Location text,
-    Image text,
-    City text,
-    Screen int
+    Id serial primary key ,
+    Name text not null,
+    Location text not null,
+    Image text not null,
+    City text not null,
+    Screen int not null
 );
 CREATE TABLE IF NOT EXISTS shows (
-    Id text primary key,
-    Time text,
+    Id serial primary key ,
+    Time text not null,
     Seats text,
-    Date text,
-    Screen int,
-    MovieId text,
-    TheatreId text,
+    Date text not null,
+    Screen int not null,
+    MovieId int not null,
+    TheatreId int not null,
     FOREIGN KEY (MovieId) REFERENCES movies(Id),
     FOREIGN KEY (TheatreId) REFERENCES theatre(Id)
 );
 CREATE TABLE IF NOT EXISTS ticket (
-    Id text primary key,
-    Date text,
-    Time text,
-    Seats text,
-    SeatCount int,
-    Screen int,
-    MovieId text,
-    TheatreId text,
-    ShowId text,
+    Id text primary key ,
+    Date text not null,
+    Time text not null,
+    Seats text not null,
+    SeatCount int not null,
+    Screen int not null,
+    MovieId int not null,
+    TheatreId int not null,
+    ShowId int not null,
     FOREIGN KEY (MovieId) REFERENCES movies(Id),
     FOREIGN KEY (TheatreId) REFERENCES theatre(Id),
     FOREIGN KEY (ShowId) REFERENCES shows(Id)

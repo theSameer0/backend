@@ -12,15 +12,23 @@ import (
 func isMatching(key string, name string) bool {
 	key = strings.ToLower(key)
 	name = strings.ToLower(name)
-	fmt.Printf("%v,%v", key, name)
-	var len int = len(key)
-	var idx int = 0
+	var Len int = len(key)
+	var nameLen int = len(name)
+
 	for i := range name {
-		if name[i] == key[idx] {
-			idx++
-			if idx == len {
-				return true
+		var idx int = 0
+		for ii := range key {
+			if i+ii >= nameLen {
+				break
 			}
+			if name[i+ii] == key[ii] {
+				idx++
+			} else {
+				break
+			}
+		}
+		if idx == Len {
+			return true
 		}
 	}
 	return false

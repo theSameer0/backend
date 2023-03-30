@@ -1,6 +1,7 @@
-package api
+package seat
 
 import (
+	INDENT "example/backend/api/struct"
 	DB "example/backend/database"
 	"fmt"
 	"net/http"
@@ -13,7 +14,7 @@ func SetSeatsOfShow(c *gin.Context) {
 	var tId = c.Param("tId")
 	var time = c.Param("time")
 	var date = c.Param("date")
-	var seat getSeat
+	var seat INDENT.GetSeat
 
 	if err := c.BindJSON(&seat); err != nil {
 		fmt.Printf("error: %T", err)

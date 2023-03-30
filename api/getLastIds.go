@@ -14,15 +14,15 @@ func GetLastIds(c *gin.Context) {
 		c.IndentedJSON(http.StatusMethodNotAllowed, gin.H{"success": false, "message": "Wrong Api Type."})
 		return
 	}
-	row1 := db.QueryRow("select COUNT(Id) from shows;")
+	row1 := db.QueryRow("select MAX(Id) from shows;")
 	defer func() {
 		db.Close()
 	}()
-	row2 := db.QueryRow("select COUNT(Id) from theatre;")
+	row2 := db.QueryRow("select MAX(Id) from theatre;")
 	defer func() {
 		db.Close()
 	}()
-	row3 := db.QueryRow("select COUNT(Id) from movies;")
+	row3 := db.QueryRow("select MAX(Id) from movies;")
 	defer func() {
 		db.Close()
 	}()

@@ -1,4 +1,4 @@
-package api
+package seat
 
 import (
 	DB "example/backend/database"

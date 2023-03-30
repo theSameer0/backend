@@ -1,7 +1,7 @@
 package api
 
 type Movie struct {
-	Id        string   `json:"id"`
+	Id        int      `json:"id"`
 	Name      string   `json:"name"`
 	Language  string   `json:"language"`
 	Image     string   `json:"image"`
@@ -11,7 +11,7 @@ type Movie struct {
 }
 
 type Theatre struct {
-	Id       string `json:"id"`
+	Id       int    `json:"id"`
 	Name     string `json:"name"`
 	Location string `json:"location"`
 	Image    string `json:"image"`
@@ -24,22 +24,30 @@ type Seats struct {
 	Seats [12][12]bool `json:"seats"` //n*m B4 C7
 }
 type Show struct {
-	Id        string `json:"id"`
-	MovieId   string `json:"movieId"`
-	TheatreId string `json:"theatreId"`
+	Id        int    `json:"id"`
+	MovieId   int    `json:"movieId"`
+	TheatreId int    `json:"theatreId"`
 	Date      string `json:"date"`
 	Time      string `json:"timing"`
 	Seats     string `json:"seats"`
 	Screen    int    `json:"screen"`
 }
 
+type TheatreMovie struct {
+	Id       int      `json:"movieId"`
+	Name     string   `json:"movieName"`
+	Language string   `json:"language"`
+	Tags     []string `json:"tags"`
+	Time     []Seat   `json:"time"`
+}
+
 type rawMovieTime struct {
-	Id        string   `json:"id"`
+	Id        int      `json:"id"`
 	Name      string   `json:"name"`
 	Tags      []string `json:"tags"`
 	Image     string   `json:"image"`
-	TheatreId string   `json:"theatreId"`
-	ShowId    string   `json:"showId"`
+	TheatreId int      `json:"theatreId"`
+	ShowId    int      `json:"showId"`
 	Time      string   `json:"time"`
 	Date      string   `json:"date"`
 	Seats     string   `json:"seats"`
@@ -51,28 +59,12 @@ type Seat struct {
 }
 
 type MovieTime struct {
-	Id        string   `json:"id"`
+	Id        int      `json:"id"`
 	Name      string   `json:"name"`
 	Tags      []string `json:"tags"`
 	Image     string   `json:"image"`
-	TheatreId string   `json:"theatreId"`
-	ShowId    string   `json:"showId"`
+	TheatreId int      `json:"theatreId"`
+	ShowId    int      `json:"showId"`
 	Date      string   `json:"date"`
 	Time      []Seat   `json:"time"`
-}
-
-type Ticket struct {
-	Id        string `json:"id"`
-	Date      string `json:"date"`
-	Time      string `json:"time"`
-	Seats     string `json:"seats"`
-	Screen    int    `json:"screen"`
-	SeatCount int    `json:"seatCount"`
-	MovieId   string `json:"movieId"`
-	TheatreId string `json:"theatreId"`
-	ShowId    string `json:"showId"`
-}
-
-type getSeat struct {
-	Seats string `json:"seats"`
 }
