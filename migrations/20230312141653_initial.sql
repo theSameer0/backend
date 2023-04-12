@@ -28,7 +28,7 @@ CREATE TABLE movies (
     Tags text not null,
     Comment text not null
 );
-CREATE TABLE IF NOT EXISTS theatre (
+CREATE TABLE IF NOT EXISTS theatres (
     Id serial primary key ,
     Name text not null,
     Location text not null,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS shows (
     MovieId int not null,
     TheatreId int not null,
     FOREIGN KEY (MovieId) REFERENCES movies(Id),
-    FOREIGN KEY (TheatreId) REFERENCES theatre(Id)
+    FOREIGN KEY (TheatreId) REFERENCES theatres(Id)
 );
 CREATE TABLE IF NOT EXISTS ticket (
     Id text primary key ,
@@ -57,13 +57,14 @@ CREATE TABLE IF NOT EXISTS ticket (
     MovieId int not null,
     TheatreId int not null,
     ShowId int not null,
+    TimeStamp text not null,
     FOREIGN KEY (MovieId) REFERENCES movies(Id),
-    FOREIGN KEY (TheatreId) REFERENCES theatre(Id),
+    FOREIGN KEY (TheatreId) REFERENCES theatres(Id),
     FOREIGN KEY (ShowId) REFERENCES shows(Id)
 );
 
 -- +goose Down
 DROP TABLE ticket;
 DROP TABLE shows;
-DROP TABLE theatre;
+DROP TABLE theatres;
 DROP TABLE movies;

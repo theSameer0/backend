@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-INSERT INTO theatre (Name,Location,Image,City,Screen) VALUES 
+INSERT INTO theatres (Name,Location,Image,City,Screen) VALUES 
 ('Urvashi Cinema Hall','Shivaji Nagar','https://ik.imagekit.io/2h0gcydui/images/UrvashiCinemaHall.png','Bangalore',4),
 ('Inox','1mg Mall','https://ik.imagekit.io/2h0gcydui/images/Theatre.png','Hyderabad',4),
 ('Cinepolis','Herbal','https://ik.imagekit.io/2h0gcydui/images/Theatre.png','Chennai',4),
@@ -13,5 +13,5 @@ INSERT INTO theatre (Name,Location,Image,City,Screen) VALUES
 
 -- +goose Down
 -- +goose StatementBegin
-DELETE FROM theatre WHERE 1=1;
+DELETE FROM theatres WHERE 1=1;
 -- +goose StatementEnd
