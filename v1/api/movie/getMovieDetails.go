@@ -30,25 +30,24 @@ func GetMovieDetail(c *gin.Context) {
 	// if err != nil {
 	// 	log.Fatalf("could not greet: %v", err)
 	// }
-
 	// log.Printf("Greeting: %s", r.GetMessage())
-	data.Id = movies.Id
 	// data.Name = movies.Name
+	data.Id = movies.Id
+	data.Name = responseFromGrpcServer(movies.Name)
 	data.HeadImage = movies.Headimage
 	data.Tags = strings.Split(movies.Tags, ":")
 	data.Comment = movies.Comment
+	c.JSON(http.StatusOK, gin.H{"success": true, "movieData": data})
+}
 
+func responseFromGrpcServer(name string) string {
 	c1 := pb.NewCapitalizeClient(database.GRPC)
-
-	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Second)
 	defer cancel()
-	r, err := c1.CapitalName(ctx, &pb.CapitalizeRequest{Name: movies.Name})
+	response, err := c1.CapitalName(ctx, &pb.CapitalizeRequest{Name: name})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	fmt.Printf("Recieved data from service running at port 50051: %v\n", r.GetName())
-	data.Name = r.GetName()
-
-	c.JSON(http.StatusOK, gin.H{"success": true, "movieData": data})
+	fmt.Printf("Recieved data from service running at port 50051: %v\n", response.GetName())
+	return string(response.GetName())
 }

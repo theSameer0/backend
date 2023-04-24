@@ -5,7 +5,7 @@ type Show struct {
 	Movieid   int    `json:"movieid"`
 	Theatreid int    `json:"theatreid"`
 	Date      string `json:"date"`
-	Time      string `json:"timing"`
+	Time      string `json:"time"`
 	Seats     string `json:"seats"`
 	Screen    int    `json:"screen"`
 }

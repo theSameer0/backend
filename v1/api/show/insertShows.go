@@ -3,6 +3,7 @@ package show
 import (
 	"example/backend/model"
 	INDENT "example/backend/v1/api/struct"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -42,7 +43,7 @@ func InsertShows(c *gin.Context) {
 		}
 	}
 
-	model.DB.Select("Date", "Time", "Seats", "Screen", "MovieId", "TheatreId").Create(&showList)
+	model.DB.Select("Movieid", "Theatreid", "Date", "Time", "Seats", "Screen").Create(&showList)
 	// row, err := db.Query("Insert into shows (Time,Seats,Date,Screen,MovieId,TheatreId) values " + insert + " RETURNING Id;")
 	// if err != nil {
 	// 	c.IndentedJSON(http.StatusNotFound, gin.H{"successs": false, "message": "Error in fetching the sql query."})
@@ -54,6 +55,7 @@ func InsertShows(c *gin.Context) {
 	// }()
 	var count int = 0
 	for _, t := range showList {
+		fmt.Printf("%v", t)
 		for {
 			if ids[count] == 0 {
 				break

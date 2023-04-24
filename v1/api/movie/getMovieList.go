@@ -3,8 +3,10 @@ package movie
 import (
 	"example/backend/model"
 	INDENT "example/backend/v1/api/struct"
+	"example/backend/v1/database"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -13,9 +15,17 @@ import (
 func GetMovieList(c *gin.Context) {
 	var getLang []string = c.QueryArray("lang[]")
 	var loc string = c.Query("loc")
+	var page = c.Query("page")
+	var offset = c.Query("offset")
+
+	currentPage, err := strconv.Atoi(page)
+	database.CheckErr(err)
+	currentOffset, err := strconv.Atoi(offset)
+	var rowsToSkip int = (currentPage - 1) * currentOffset
 	var lang string
 	var isAll bool = false
 	var len int = len(getLang)
+	var num int
 
 	for i, t := range getLang {
 		if t == "All" {
@@ -39,7 +49,8 @@ func GetMovieList(c *gin.Context) {
 	subQuery1 := model.DB.Model(&model.Theatre{}).Select("Id").Where("City = ?", loc)
 	// fmt.Printf("%v", subQuery1)
 	subQuery2 := model.DB.Model(&model.Show{}).Where("TheatreId IN (?) ", subQuery1).Select("Distinct(MovieId)")
-	model.DB.Model(&model.Movie{}).Where("(Language in ("+lang+") or ? = true) and Id in (?)", isAll, subQuery2).Find(&movieList)
+	model.DB.Limit(currentOffset).Offset(rowsToSkip).Model(&model.Movie{}).Where("(Language in ("+lang+") or ? = true) and Id in (?)", isAll, subQuery2).Find(&movieList)
+	model.DB.Model(&model.Movie{}).Where("(Language in ("+lang+") or ? = true) and Id in (?)", isAll, subQuery2).Select("Count(Id)").Find(&num)
 
 	// row, err := db.Query("select Id, Name, Language, Image , HeadImage, Tags,Comment from movies where (Language in ("+lang+") or $1 = true) and Id in (select distinct(s.MovieId) from theatre t,shows s where s.TheatreId = t.Id and t.City = $2);", isAll, loc)
 	// if err != nil {
@@ -65,5 +76,5 @@ func GetMovieList(c *gin.Context) {
 	// 	movieList = append(movieList, tmpMovie)
 	// }
 	// c.IndentedJSON(http.StatusOK, gin.H{"success": true, "movieList": movieList})
-	c.JSON(http.StatusOK, gin.H{"success": true, "movieList": movieList})
+	c.JSON(http.StatusOK, gin.H{"success": true, "movieList": movieList, "totalMovies": num})
 }
