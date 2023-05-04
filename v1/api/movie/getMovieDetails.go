@@ -25,13 +25,6 @@ func GetMovieDetail(c *gin.Context) {
 	var movies model.Movie
 	var data INDENT.MovieData
 	model.DB.Model(&movies).Where("Id = ?", mId).Find(&movies)
-	// var ctx = context.Context
-	// r, err = c.CapitalName(ctx, &pb.CapitalizeRequest{Name: movies.Name})
-	// if err != nil {
-	// 	log.Fatalf("could not greet: %v", err)
-	// }
-	// log.Printf("Greeting: %s", r.GetMessage())
-	// data.Name = movies.Name
 	data.Id = movies.Id
 	data.Name = responseFromGrpcServer(movies.Name)
 	data.HeadImage = movies.Headimage

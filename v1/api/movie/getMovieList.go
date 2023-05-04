@@ -1,18 +1,38 @@
 package movie
 
 import (
+	"encoding/json"
 	"example/backend/model"
 	INDENT "example/backend/v1/api/struct"
 	"example/backend/v1/database"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetMovieList(c *gin.Context) {
+	link := c.Request.Referer()
+	var finalResult INDENT.MovieListCacheType
+	result, err := database.Cache.GetMovieListCache(link)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"success": false, "message": "error in checking in cache"})
+		log.Fatal(err)
+	}
+	if result != nil {
+		err := json.Unmarshal(result, &finalResult)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"success": false, "message": "error in fetching in cache"})
+			log.Fatal(err)
+		}
+		c.JSON(http.StatusOK, gin.H{"success": true, "movieList": finalResult.MoviesList, "totalMovies": finalResult.TotalMovies})
+		return
+	}
+
 	var getLang []string = c.QueryArray("lang[]")
 	var loc string = c.Query("loc")
 	var page = c.Query("page")
@@ -52,6 +72,14 @@ func GetMovieList(c *gin.Context) {
 	model.DB.Limit(currentOffset).Offset(rowsToSkip).Model(&model.Movie{}).Where("(Language in ("+lang+") or ? = true) and Id in (?)", isAll, subQuery2).Find(&movieList)
 	model.DB.Model(&model.Movie{}).Where("(Language in ("+lang+") or ? = true) and Id in (?)", isAll, subQuery2).Select("Count(Id)").Find(&num)
 
+	finalResult.MoviesList = movieList
+	finalResult.TotalMovies = num
+
+	err = database.Cache.SetMovieListCache(link, finalResult, 1*time.Minute)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"success": false, "message": "error in updating in cache"})
+		log.Fatal(err)
+	}
 	// row, err := db.Query("select Id, Name, Language, Image , HeadImage, Tags,Comment from movies where (Language in ("+lang+") or $1 = true) and Id in (select distinct(s.MovieId) from theatre t,shows s where s.TheatreId = t.Id and t.City = $2);", isAll, loc)
 	// if err != nil {
 	// 	c.IndentedJSON(http.StatusMethodNotAllowed, gin.H{"success": false, "message": "Some issue while fetching querying SQL.", "Error": err})

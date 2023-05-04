@@ -25,6 +25,7 @@ func main() {
 	model.ConnectDatabase()
 	database.GrpcConnect()
 	defer database.GRPC.Close()
+	database.InitRedisCache()
 
 	router.GET("/movieList/v1", movie.GetMovieList)
 	router.GET("/movieDetail/v1/:mId", movie.GetMovieDetail)
