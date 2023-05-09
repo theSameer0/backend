@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "example/backend/v1/pb";
+
+message CapitalizeRequest {
+    string name = 1;
+}
+
+message CapitalizeReply {
+    string name = 1;
+}
+
+service Capitalize {
+    rpc CapitalName (CapitalizeRequest) returns (CapitalizeReply) {};
+}
