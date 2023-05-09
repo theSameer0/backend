@@ -5,5 +5,5 @@
 
 -- +goose Down
 -- +goose StatementBegin
-delete from ticket where Id != '';
+delete from ticket where 1=1;
 -- +goose StatementEnd
